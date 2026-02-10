@@ -5,12 +5,13 @@ import { useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 interface UploadAreaProps {
-  onFileLoaded: (content: string, filename: string) => void
+  onFileLoaded: (content: string, filename: string, file: File) => void
+  defaultFile?: File | null
 }
 
-export function UploadArea({ onFileLoaded }: UploadAreaProps) {
+export function UploadArea({ onFileLoaded, defaultFile }: UploadAreaProps) {
   const [isDragging, setIsDragging] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(defaultFile || null)
   const [error, setError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -88,7 +89,7 @@ export function UploadArea({ onFileLoaded }: UploadAreaProps) {
         return
       }
 
-      onFileLoaded(content, selectedFile.name)
+      onFileLoaded(content, selectedFile.name, selectedFile)
     }
     reader.onerror = () => {
       setError('读取文件失败')

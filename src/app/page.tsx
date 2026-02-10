@@ -9,10 +9,12 @@ import { cn } from '@/lib/utils'
 export default function Home() {
   const [content, setContent] = useState<string | null>(null)
   const [filename, setFilename] = useState<string>('document.md')
+  const [file, setFile] = useState<File | null>(null)
 
-  const handleFileLoaded = (newContent: string, name: string) => {
+  const handleFileLoaded = (newContent: string, name: string, uploadedFile: File) => {
     setContent(newContent)
     setFilename(name)
+    setFile(uploadedFile)
   }
 
   const handleBack = () => {
@@ -90,7 +92,7 @@ ${document.getElementById('markdown-preview')?.innerHTML || ''}
               <h1 className="mb-8 text-2xl font-semibold text-gray-800">
                 Markdown 预览导出
               </h1>
-              <UploadArea onFileLoaded={handleFileLoaded} />
+              <UploadArea onFileLoaded={handleFileLoaded} defaultFile={file} />
             </div>
           )
         : (
@@ -133,7 +135,7 @@ ${document.getElementById('markdown-preview')?.innerHTML || ''}
                 </div>
               </header>
 
-              <div className="flex flex-col gap-2 px-6 pb-8 sm:px-8">
+              <div className="flex flex-col gap-2 px-6 pb-20 sm:px-8">
                 <div className="flex items-center print:hidden">
                   <h2 className="text-sm font-semibold text-gray-500">预览</h2>
                   <span className="text-xs ml-2 text-gray-500">{filename}</span>
@@ -144,6 +146,15 @@ ${document.getElementById('markdown-preview')?.innerHTML || ''}
               </div>
             </div>
           )}
+      <footer className="fixed w-full bottom-0 z-50 mt-4 flex items-center justify-center border-t border-gray-300 bg-[#f1f2f477] px-6 h-8 backdrop-blur-md print:hidden">
+        <p className="text-sm text-gray-400">
+          &copy;
+          {' '}
+          {new Date().getFullYear()}
+          {' '}
+          lianchi
+        </p>
+      </footer>
     </main>
   )
 }
