@@ -1,1 +1,26 @@
-@import "tailwindcss";@plugin "@tailwindcss/typography";@theme{--radius:.625rem;--color-primary:#07ab41;--color-primary-foreground:#ffffff;--color-primary-hover:#069037;}:root{}ol,ul{list-style:inherit;}@media print{body{background:white}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.625rem;
+    --color-primary: #07ab41;
+    --color-primary-foreground: #ffffff;
+    --color-primary-hover: #069037;
+  }
+}
+
+ol, ul {
+  list-style: inherit;
+}
+
+@media print {
+  body {
+    background: white;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
