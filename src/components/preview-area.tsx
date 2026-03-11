@@ -1,33 +1,71 @@
 'use client'
-import ReactMarkdown from 'react-markdown'
+import type { ComponentPropsWithoutRef } from 'react'
+import ReactMarkdown, { defaultUrlTransform } from 'react-markdown'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeRaw from 'rehype-raw'
+import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
-
-// CSS is now loaded via <link> in layout.tsx from local files in public/
-// import 'highlight.js/styles/github.css'
-// import 'github-markdown-css/github-markdown-light.css'
+import { CodeBlock } from './code-block'
+import { ImageZoom } from './image-zoom'
+import { MermaidDiagram } from './mermaid-diagram'
+import { TableOfContents } from './table-of-contents'
 
 interface PreviewAreaProps {
   content: string
 }
 
+/**
+ * Custom URL transform that allows data: URIs (base64-encoded images) to pass through.
+ * The default urlTransform in react-markdown v9+ strips data: URIs for security,
+ * which prevents inline base64 images from rendering.
+ */
+function urlTransform(url: string) {
+  if (url.startsWith('data:')) {
+    return url
+  }
+  return defaultUrlTransform(url)
+}
+
+/**
+ * Custom code component that intercepts mermaid code blocks and renders them as diagrams.
+ * Other code blocks are rendered as normal <code> elements with syntax highlighting.
+ */
+function Code({ className, children, ...props }: ComponentPropsWithoutRef<'code'>) {
+  const match = /language-mermaid/.exec(className || '')
+  const codeText = String(children).replace(/\n$/, '')
+
+  if (match) {
+    return <MermaidDiagram chart={codeText} />
+  }
+
+  return (
+    <code className={className} {...props}>
+      {children}
+    </code>
+  )
+}
+
 export function PreviewArea({ content }: PreviewAreaProps) {
+  // Detect [[TOC]] marker at the beginning of the document
+  const tocPattern = /^\s*\[\[TOC\]\]\s*/i
+  const showToc = tocPattern.test(content)
+  // Strip the [[TOC]] marker so it doesn't render as literal text
+  const markdownContent = showToc ? content.replace(tocPattern, '') : content
+
   return (
     <div id="markdown-preview" className="markdown-body w-full">
+      {showToc && <TableOfContents content={markdownContent} />}
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw, rehypeHighlight]}
+        rehypePlugins={[rehypeRaw, rehypeSlug, rehypeHighlight]}
+        urlTransform={urlTransform}
         components={{
-          // We can remove most custom overrides because github-markdown-css handles them well.
-          // But we can keep them if we want specific overrides.
-          // For now, let's remove the overrides to let github-markdown-css do its job,
-          // which solves the "blurriness" or "bad style" issue by using the standard.
-          // However, if we need to support specific things, we can add them back.
-          // Since user asked for "GitHub theme", using the CSS class and removing manual overrides is the best way.
+          code: Code,
+          pre: CodeBlock,
+          img: ImageZoom,
         }}
       >
-        {content}
+        {markdownContent}
       </ReactMarkdown>
     </div>
   )
