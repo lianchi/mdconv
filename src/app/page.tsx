@@ -236,7 +236,7 @@ ${previewHtml}
         : (
           <div className="mx-auto max-w-4xl print:p-0 print:max-w-none">
             <header className="sticky top-0 z-50 mb-4 flex items-center justify-between border-b border-gray-300 bg-[#f1f2f477] px-6 py-4 backdrop-blur-md print:hidden">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1">
                 <button
                   onClick={handleBack}
                   className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full hover:bg-gray-200"
@@ -244,30 +244,30 @@ ${previewHtml}
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </button>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <img src="/favicon.svg" alt="Logo" className="h-6 w-6" />
                   <h1 className="text-lg font-semibold tracking-tight">MDConv</h1>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center">
                 <button
                   onClick={handleExportHTML}
                   className={cn(
                     'inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-                    'hover:bg-gray-200 h-9 px-3',
+                    'hover:bg-gray-200 h-9 px-2',
                   )}
                 >
-                  <Download className="mr-2 h-4 w-4" />
+                  <Download className="mr-1 h-4 w-4" />
                   导出 HTML
                 </button>
                 <button
                   onClick={handlePrint}
                   className={cn(
                     'inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-                    'hover:bg-gray-200 h-9 px-3',
+                    'hover:bg-gray-200 h-9 px-2',
                   )}
                 >
-                  <Printer className="mr-2 h-4 w-4" />
+                  <Printer className="mr-1 h-4 w-4" />
                   打印 PDF
                 </button>
               </div>
