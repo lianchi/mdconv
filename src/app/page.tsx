@@ -6,6 +6,10 @@ import { PreviewArea } from '@/components/preview-area'
 import { UploadArea } from '@/components/upload-area'
 import { cn } from '@/lib/utils'
 
+// Move regex to module scope to avoid re-compilation
+const MD_EXTENSION_REGEX = /\.md$/i
+const MARKDOWN_EXTENSIONS_REGEX = /\.(md|txt|markdown)$/i
+
 export default function Home() {
   const [content, setContent] = useState<string | null>(null)
   const [filename, setFilename] = useState<string>('document.md')
@@ -59,7 +63,7 @@ export default function Home() {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${filename.replace(/\.md$/i, '')}</title>
+<title>${filename.replace(MD_EXTENSION_REGEX, '')}</title>
 <style>
 ${githubMarkdownCss}
 ${highlightCss}
@@ -206,7 +210,7 @@ ${previewHtml}
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = filename.replace(/\.(md|txt|markdown)$/i, '.html')
+    a.download = filename.replace(MARKDOWN_EXTENSIONS_REGEX, '.html')
     // Ensure extension is html if regex didn't match (e.g. file has no extension)
     if (!a.download.toLowerCase().endsWith('.html')) {
       a.download += '.html'
@@ -225,65 +229,65 @@ ${previewHtml}
     <main className="min-h-screen bg-[#f1f2f4] text-gray-900 print:bg-white">
       {!content
         ? (
-          <div className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8">
-            <img src="/favicon.svg" alt="Logo" className="h-12 w-12 mt-[-100px]" />
-            <h1 className="mb-8 text-2xl font-semibold text-gray-800">
-              Markdown 预览导出
-            </h1>
-            <UploadArea onFileLoaded={handleFileLoaded} defaultFile={file} />
-          </div>
-        )
+            <div className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8">
+              <img src="/favicon.svg" alt="Logo" className="h-12 w-12 mt-[-100px]" />
+              <h1 className="mb-8 text-2xl font-semibold text-gray-800">
+                Markdown 预览导出
+              </h1>
+              <UploadArea onFileLoaded={handleFileLoaded} defaultFile={file} />
+            </div>
+          )
         : (
-          <div className="mx-auto max-w-4xl print:p-0 print:max-w-none">
-            <header className="sticky top-0 z-50 mb-4 flex items-center justify-between border-b border-gray-300 bg-[#f1f2f477] px-6 py-4 backdrop-blur-md print:hidden">
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={handleBack}
-                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full hover:bg-gray-200"
-                  title="返回"
-                >
-                  <ArrowLeft className="h-5 w-5" />
-                </button>
+            <div className="mx-auto max-w-4xl print:p-0 print:max-w-none">
+              <header className="sticky top-0 z-50 mb-4 flex items-center justify-between border-b border-gray-300 bg-[#f1f2f477] px-6 py-4 backdrop-blur-md print:hidden">
                 <div className="flex items-center gap-1">
-                  <img src="/favicon.svg" alt="Logo" className="h-6 w-6" />
-                  <h1 className="text-lg font-semibold tracking-tight">MDConv</h1>
+                  <button
+                    onClick={handleBack}
+                    className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full hover:bg-gray-200"
+                    title="返回"
+                  >
+                    <ArrowLeft className="h-5 w-5" />
+                  </button>
+                  <div className="flex items-center gap-1">
+                    <img src="/favicon.svg" alt="Logo" className="h-6 w-6" />
+                    <h1 className="text-lg font-semibold tracking-tight">MDConv</h1>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <button
+                    onClick={handleExportHTML}
+                    className={cn(
+                      'inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+                      'hover:bg-gray-200 h-9 px-2',
+                    )}
+                  >
+                    <Download className="mr-1 h-4 w-4" />
+                    导出 HTML
+                  </button>
+                  <button
+                    onClick={handlePrint}
+                    className={cn(
+                      'inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+                      'hover:bg-gray-200 h-9 px-2',
+                    )}
+                  >
+                    <Printer className="mr-1 h-4 w-4" />
+                    打印 PDF
+                  </button>
+                </div>
+              </header>
+
+              <div className="flex flex-col gap-2 px-6 pb-20 sm:px-8">
+                <div className="flex items-center print:hidden">
+                  <h2 className="text-sm font-semibold text-gray-500">预览</h2>
+                  <span className="text-xs ml-2 text-gray-500">{filename}</span>
+                </div>
+                <div className="min-h-[600px] rounded-xl border border-gray-300 bg-white p-8 print:border-0 print:p-0">
+                  <PreviewArea content={content} />
                 </div>
               </div>
-              <div className="flex items-center">
-                <button
-                  onClick={handleExportHTML}
-                  className={cn(
-                    'inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-                    'hover:bg-gray-200 h-9 px-2',
-                  )}
-                >
-                  <Download className="mr-1 h-4 w-4" />
-                  导出 HTML
-                </button>
-                <button
-                  onClick={handlePrint}
-                  className={cn(
-                    'inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-                    'hover:bg-gray-200 h-9 px-2',
-                  )}
-                >
-                  <Printer className="mr-1 h-4 w-4" />
-                  打印 PDF
-                </button>
-              </div>
-            </header>
-
-            <div className="flex flex-col gap-2 px-6 pb-20 sm:px-8">
-              <div className="flex items-center print:hidden">
-                <h2 className="text-sm font-semibold text-gray-500">预览</h2>
-                <span className="text-xs ml-2 text-gray-500">{filename}</span>
-              </div>
-              <div className="min-h-[600px] rounded-xl border border-gray-300 bg-white p-8 print:border-0 print:p-0">
-                <PreviewArea content={content} />
-              </div>
             </div>
-          </div>
-        )}
+          )}
       <footer className="fixed w-full bottom-0 z-50 mt-4 flex items-center justify-center border-t border-gray-300 bg-[#f1f2f477] px-6 h-8 backdrop-blur-md print:hidden">
         <p className="text-sm text-gray-400">
           &copy;

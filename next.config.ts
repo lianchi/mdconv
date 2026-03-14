@@ -6,7 +6,8 @@ const withSerwist = withSerwistInit({
   swDest: 'public/sw.js',
   cacheOnNavigation: true,
   reloadOnOnline: true,
-  disable: false,
+  // eslint-disable-next-line node/prefer-global/process
+  disable: process.env.NODE_ENV !== 'production',
 })
 
 const nextConfig: NextConfig = {
@@ -14,7 +15,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // 移除 turbopack 配置，强制使用 webpack
+  // Add empty turbopack config to silence warnings
+  turbopack: {},
 }
 
 export default withSerwist(nextConfig)

@@ -143,7 +143,7 @@ export function UploadArea({ onFileLoaded, defaultFile }: UploadAreaProps) {
                     </p>
                   </div>
                   <button
-                    className="absolute top-2 right-2 h-8 w-8 p-0 flex items-center justify-center rounded-full bg-white cursor-pointer"
+                    className="absolute top-2 right-2 h-8 w-8 p-0 flex items-center justify-center rounded-full bg-white cursor-pointer shadow-xl"
                     onClick={handleRemoveFile}
                   >
                     <X className="h-4 w-4" />
