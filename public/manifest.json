@@ -1,0 +1,17 @@
+{
+  "name": "MDConv - Markdown 预览与导出",
+  "short_name": "MDConv",
+  "description": "轻量级 Markdown 预览与导出工具",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
