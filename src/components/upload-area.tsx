@@ -1,6 +1,6 @@
 'use client'
 
-import { FileText, UploadCloud, X } from 'lucide-react'
+import { CirclePlus, FileText, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -104,7 +104,7 @@ export function UploadArea({ onFileLoaded, defaultFile }: UploadAreaProps) {
   return (
     <div className="w-full max-w-[480px] rounded-xl border border-gray-300 bg-white">
       <div className="flex flex-col space-y-1.5 p-6">
-        <h3 className="font-semibold leading-none text-lg">上传文件</h3>
+        <h3 className="font-semibold leading-none text-lg">添加文件</h3>
         <p className="text-sm text-muted-foreground text-gray-500">支持格式：.md, .txt。文件大小不超过 10MB。</p>
       </div>
       <div className="p-6 pt-0">
@@ -153,9 +153,9 @@ export function UploadArea({ onFileLoaded, defaultFile }: UploadAreaProps) {
             : (
                 <div className="flex flex-col items-center gap-2 text-center">
                   <div className="p-2 rounded-full bg-white">
-                    <UploadCloud className="w-8 h-8 text-gray-400" />
+                    <CirclePlus className="w-8 h-8 text-gray-400" />
                   </div>
-                  <p className="font-medium text-gray-600">点击上传</p>
+                  <p className="font-medium text-gray-600">点击添加</p>
                 </div>
               )}
         </div>

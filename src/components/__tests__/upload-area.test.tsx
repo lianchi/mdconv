@@ -5,7 +5,7 @@ import { UploadArea } from '../upload-area'
 describe('uploadArea', () => {
   it('renders upload prompt', () => {
     render(<UploadArea onFileLoaded={() => {}} />)
-    expect(screen.getByText(/上传文件/)).toBeInTheDocument()
+    expect(screen.getByText(/添加文件/)).toBeInTheDocument()
   })
 
   it('validates file extension', async () => {
@@ -13,7 +13,7 @@ describe('uploadArea', () => {
     render(<UploadArea onFileLoaded={onFileLoaded} />)
 
     const file = new File(['dummy content'], 'test.pdf', { type: 'application/pdf' })
-    const dropZone = screen.getByText(/点击上传/).closest('div')?.parentElement
+    const dropZone = screen.getByText(/点击添加/).closest('div')?.parentElement
 
     if (!dropZone)
       throw new Error('Drop zone not found')
@@ -33,7 +33,7 @@ describe('uploadArea', () => {
     render(<UploadArea onFileLoaded={onFileLoaded} />)
 
     const file = new File(['# Markdown'], 'test.md', { type: 'text/markdown' })
-    const dropZone = screen.getByText(/点击上传/).closest('div')?.parentElement
+    const dropZone = screen.getByText(/点击添加/).closest('div')?.parentElement
 
     if (!dropZone)
       throw new Error('Drop zone not found')
@@ -44,7 +44,7 @@ describe('uploadArea', () => {
       },
     })
 
-    const confirmButton = screen.getByText('确认上传')
+    const confirmButton = screen.getByText('确认添加')
     fireEvent.click(confirmButton)
 
     await waitFor(() => {
