@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { PreviewArea } from '../preview-area'
 
@@ -14,5 +14,13 @@ describe('previewArea', () => {
     const content = '<div data-testid="raw-html">Raw HTML</div>'
     render(<PreviewArea content={content} />)
     expect(screen.getByTestId('raw-html')).toBeInTheDocument()
+  })
+
+  it('renders toc when [[TOC]] exists and markdown has headings', async () => {
+    const content = '[[TOC]]\n# Heading One\n\nContent'
+    const { container } = render(<PreviewArea content={content} />)
+    await waitFor(() => {
+      expect(container.querySelector('.toc-container')).toBeInTheDocument()
+    })
   })
 })
